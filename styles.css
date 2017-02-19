@@ -1,0 +1,7 @@
+.individualRoomSelection{
+	width:350px;
+	height: 30px;
+	cursor: pointer;
+	background-color: #ddd;
+	margin-bottom: 5px;
+}

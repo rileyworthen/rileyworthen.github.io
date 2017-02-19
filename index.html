@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="calculator">
+<head>
+	<title>CarpetMeasure</title>
+
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="rating" content="General">
+    <base href="/carpetMeasure/">
+
+	<!-- Styles -->
+	<link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+<body ng-controller="carpetMeasureController as vm">
+
+
+	<h1 class=""> MyFlooringBudget.com: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  ${{vm.finalCost}}</h1>
+	<h3 id="alertion"></h3>
+	<hr style="position: relative;"><br>
+	<div class="All">
+		<form>
+			<div class="addressAndflooringCostContainer">
+				<b class="">Address: <input type="text" placeholder="Address*" class="" ng-model="vm.homeAddress"><br><u>COST FOR MATERIALS</u></b>
+				<div class="">
+					<b class="">Carpet: &nbsp&nbsp$<input class="" type="text" placeholder="$*" ng-model="vm.carpetCost"></b>
+				</div>
+				<div class="">
+					<b class="">Plank: &nbsp&nbsp$<input class="" type="text" placeholder="$*" ng-model="vm.plankCost"></b>
+				</div>
+				<div class="">
+					<b class="">Tile: &nbsp&nbsp$<input class="" type="text" placeholder="$*" ng-model="vm.tileCost"></b>
+				</div>
+				<div class="">
+					<b class="">Sheet Vinyl: &nbsp&nbsp$<input class="" type="text" placeholder="$*" ng-model="vm.sheetVinylCost"></b>
+				</div>
+			</div>
+			<div class="selectARoom"><br>
+				<b class=""><u>SELECT A ROOM</u></b>
+				<!-- ADD THE CLICK THIS BOX FUNCTION -->
+				<div class="individualRoomSelection" ng-repeat="room in vm.selectRoom"> 
+					<b class="">{{room.roomName}}: <select class="" ng-model="room.floorType" ng-options="item.type as item.option for item in vm.options"></select></b><button ng-click="vm.sendToCurrentWorkBench(room.roomType, room.floorType, null)">Add</button>
+				</div>
+				<div class="individualRoomSelection">
+					<b class=""><input type="text" placeholder="Name*" ng-model="vm.roomNewName">: <select class="" ng-model="vm.floorType" ng-options="item.type as item.option for item in vm.options"></select></b><button ng-click="vm.sendToCurrentWorkBench(9, vm.floorType, vm.roomNewName)">Add</button>
+				</div>
+			</div>
+			<div class="workBench">
+				<b><u>WORKBENCH</u></b>
+				<div class="current" ng-repeat="bench in vm.currentInWorkBench">
+					<b class="">{{bench.roomName}}: 
+						<div ng-if="bench.roomType === 4">
+							<input type="checkbox" ng-model="bench.active"> :Check if the stairs are non-standard which is 10" high and 11" deep<br>
+							<input type="text" placeholder="Steps*" ng-model="bench.steps"> X <input type="text" placeholder="Width*" ng-model="bench.width"><br>
+							<div ng-show="bench.active"> X <br>
+								<input type="text" placeholder="Height" ng-model="bench.height"> X <input type="text" placeholder="depth" ng-model="bench.depth">
+							</div>
+							<button ng-click="vm.saveRoomFromWorkBench(bench.roomName, bench.sysf, bench.floorType, bench.roomType, $index, bench.steps, bench.width, bench.height, 0, 0, bench.depth)">Save Room</button>
+							<button ng-click="vm.addAClosetToRoomInWorkBench(bench.roomName + ' Closet', bench.sysf, bench.floorType, bench.roomType)">Add Closet</button>
+						</div>
+						<div ng-if="bench.roomType !== 4">
+							<input type="checkbox" ng-model="bench.active"> :Check if the room is L-shaped<br>
+							<input type="text" placeholder="Width*" ng-model="bench.width1"> X <input type="text" placeholder="Length*" ng-model="bench.height1"><br>
+							<div ng-show="bench.active"> + <br>
+								<input type="text" placeholder="Width*" ng-model="bench.width2"> X <input type="text" placeholder="Height*" ng-model="bench.height2">
+							</div>
+							<button ng-click="vm.saveRoomFromWorkBench(bench.roomName, bench.sysf, bench.floorType, bench.roomType, $index, 0, bench.width1, bench.height1, bench.width2, bench.height2, 0)">Save Room</button>
+							<button ng-click="vm.addAClosetToRoomInWorkBench(bench.roomName + ' Closet', bench.sysf, bench.floorType, bench.roomType)">Add Closet</button>
+						</div>
+					</b>
+				</div>
+			</div>
+			<div class="DisplayRoom" style="margin-left: 400px; margin-top: -500px;">
+				<b><u>SPREAD OF ROOMS</u></b><br>
+				<b><u>delete | room | carpet | plank | tile | sheet vinyl</u></b>
+				<div class="" ng-repeat="display in vm.savedRooms">
+					<b ng-if="display.roomType === 4">
+						<button ng-click="vm.removeRowFromSavedRooms($index)">X</button> <a ng-click="vm.sendToWorkBenchForUpdates($index, display.roomName, display.sysf, display.floorType, display.roomType, display.CAmount, display.PAmount, display.TAmount, display.VAmount)">{{display.roomName}}</a> <span class="carpetRoomSize" ng-if="display.floorType === 0">{{display.CAmount}} 0 0 0</span><span class="plankRoomSize" ng-if="display.floorType === 1">0 {{display.PAmount}} 0 0</span><span class="tileRoomSize" ng-if="display.floorType === 2">0 0 {{display.TAmount}} 0</span><span class="sheetVinylRoomSize" ng-if="display.floorType === 3">0 0 0 {{display.VAmount}} </span><br>
+					</b>
+					<b ng-if="display.roomType !== 4">
+						<button ng-click="vm.removeRowFromSavedRooms($index)">X</button> <a ng-click="vm.sendToWorkBenchForUpdates($index, display.roomName, display.sysf, display.floorType, display.roomType, display.CAmount, display.PAmount, display.TAmount, display.VAmount)">{{display.roomName}}</a> <span class="carpetRoomSize" ng-if="display.floorType === 0">{{display.CAmount}} 0 0 0</span><span class="plankRoomSize" ng-if="display.floorType === 1">0 {{display.PAmount}} 0 0</span><span class="tileRoomSize" ng-if="display.floorType === 2">0 0 {{display.TAmount}} 0</span><span class="sheetVinylRoomSize" ng-if="display.floorType === 3">0 0 0 {{display.VAmount}} </span><br>
+					</b>
+				</div>
+				<b style="text-decoration: overline;">Total Plus Smart Waste {{vm.carpetAmount + " " + vm.plankAmount + " " + vm.tileAmount + " " + vm.vinylAmount}}</b>
+			</div>
+		</form>
+	</div>
+
+</body>
+
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-touch/1.6.1/angular-touch.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+
+	<!-- Javascripts -->
+	<script type="text/javascript" src="calculations.js"></script>
+</html>
