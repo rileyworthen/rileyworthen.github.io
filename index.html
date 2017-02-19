@@ -53,18 +53,18 @@
 					<b class="">{{bench.roomName}}: 
 						<div ng-if="bench.roomType === 4">
 							<input type="checkbox" ng-model="bench.active"> :Check if the stairs are non-standard which is 10" high and 11" deep<br>
-							<input type="text" placeholder="Steps*" ng-model="bench.steps"> X <input type="text" placeholder="Width*" ng-model="bench.width"><br>
+							<input type="number" placeholder="Steps*" ng-model="bench.steps"> X <input type="number" placeholder="Width*" ng-model="bench.width"><br>
 							<div ng-show="bench.active"> X <br>
-								<input type="text" placeholder="Height" ng-model="bench.height"> X <input type="text" placeholder="depth" ng-model="bench.depth">
+								<input type="number" placeholder="Height" ng-model="bench.height"> X <input type="number" placeholder="depth" ng-model="bench.depth">
 							</div>
 							<button ng-click="vm.saveRoomFromWorkBench(bench.roomName, bench.sysf, bench.floorType, bench.roomType, $index, bench.steps, bench.width, bench.height, 0, 0, bench.depth)">Save Room</button>
 							<button ng-click="vm.addAClosetToRoomInWorkBench(bench.roomName + ' Closet', bench.sysf, bench.floorType, bench.roomType)">Add Closet</button>
 						</div>
 						<div ng-if="bench.roomType !== 4">
 							<input type="checkbox" ng-model="bench.active"> :Check if the room is L-shaped<br>
-							<input type="text" placeholder="Width*" ng-model="bench.width1"> X <input type="text" placeholder="Length*" ng-model="bench.height1"><br>
+							<input type="number" placeholder="Width*" ng-model="bench.width1"> X <input type="number" placeholder="Length*" ng-model="bench.height1"><br>
 							<div ng-show="bench.active"> + <br>
-								<input type="text" placeholder="Width*" ng-model="bench.width2"> X <input type="text" placeholder="Height*" ng-model="bench.height2">
+								<input type="number" placeholder="Width*" ng-model="bench.width2"> X <input type="number" placeholder="Height*" ng-model="bench.height2">
 							</div>
 							<button ng-click="vm.saveRoomFromWorkBench(bench.roomName, bench.sysf, bench.floorType, bench.roomType, $index, 0, bench.width1, bench.height1, bench.width2, bench.height2, 0)">Save Room</button>
 							<button ng-click="vm.addAClosetToRoomInWorkBench(bench.roomName + ' Closet', bench.sysf, bench.floorType, bench.roomType)">Add Closet</button>
